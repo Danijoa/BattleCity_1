@@ -40,14 +40,15 @@ void CollisionCheck::findPlayerFutureData()
 	playerIndex_Y = (playerFuturePos.y - 50) / TILESIZE;
 
 	//
-	 playerMoveCheck();
-	 mapCollisionCheck();
+	playerMoveCheck();
+	mapCollisionCheck();
 	// �� �� �ִ� �÷��̾ ������ ��ġ�� �ε���
 	playerFutureRectIndex.left = ((playerFuturePos.x - size / 2) - 200) / TILESIZE;
 	playerFutureRectIndex.right = ((playerFuturePos.x + size / 2) - 200) / TILESIZE;
 
 	playerFutureRectIndex.top = ((playerFuturePos.y - size / 2) - 50) / TILESIZE;
 	playerFutureRectIndex.bottom = ((playerFuturePos.y + size / 2) - 50) / TILESIZE;
+}
 
 
 void CollisionCheck::playerMoveCheck()

@@ -9,7 +9,6 @@ class Enemy : public GameNode
 {
 private:
 	MissileManager* missileMgr;
-	CollisionCheck* collisionCheck;
 
 	Image* image;
 	int currFrameX, currFrameY;
