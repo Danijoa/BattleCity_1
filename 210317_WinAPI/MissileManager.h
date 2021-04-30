@@ -11,10 +11,12 @@ private:
 	vector<Missile*> vMissiles;
 	vector<Missile*>::iterator itMissiles;
 
-	Enemy* owner;
+	Enemy* enemyOwner;
+	PlayerShip* playerOwner;
 
 public:
-	HRESULT Init(Enemy* owner);
+	HRESULT Init(Enemy* enemyOwner);
+	HRESULT Init(PlayerShip* playerOwner);
 	void Release();
 	void Update();
 	void Render(HDC hdc);

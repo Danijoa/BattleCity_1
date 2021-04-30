@@ -33,8 +33,7 @@ public:
 	virtual void Update();
 	virtual void Render(HDC hdc);
 
-	void playerMoveCheckThree();
-	void playerMoveCheckTwo();
+	void playerMoveCheck();
 
 	// ¸Ê Å¸ÀÏ Á¤º¸
 	inline void SetTileInfo(TILE_INFO* tileInfo) { this->tileInfo = tileInfo; }

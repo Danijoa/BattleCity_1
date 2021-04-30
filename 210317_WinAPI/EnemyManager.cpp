@@ -4,8 +4,8 @@
 
 HRESULT EnemyManager::Init(CollisionCheck* collisionCheck)
 {
-    vEnemys.resize(2);
-    for (int i = 0; i < 2; i++)
+    vEnemys.resize(1);
+    for (int i = 0; i < 1; i++)
     {
         vEnemys[i] = new Enemy();
         vEnemys[i]->Init(500 + (i % 5) * 200, 100 + (i / 5) * 500);

@@ -45,7 +45,8 @@ void BattleScene::Update()
 {
 	float currTime1 = TimerManager::GetSingleton()->GetCurrTime();
 
-	loadStage(3);
+	//로드할 스테이지 결정 
+	loadStage(2);
 
 	if (enemyMgr)
 	{

@@ -46,20 +46,15 @@ void Enemy::Release()
 
 void Enemy::Update()
 {
-    if (isAlive)
+    if (missileMgr)
     {
-        // 미사일 발사
-        if (missileMgr)
-        {
-            // 함수 호출 주기를 바꿔보자.
-            fireCount++;
-            if (fireCount % 20 == 0)
-            {
-                fireCount = 0;
-               // missileMgr->Fire();
-            }
-           // missileMgr->Update();
-        }
+        missileMgr->Update();
+    }
+
+
+    if (KeyManager::GetSingleton()->IsOnceKeyDown('X'))
+    {
+        missileMgr->Fire();
     }
 }
 
@@ -76,7 +71,7 @@ void Enemy::Render(HDC hdc)
 
         if (missileMgr)
         {
-           // missileMgr->Render(hdc);
+            missileMgr->Render(hdc);
         }
     }
 }

@@ -11,8 +11,15 @@ HRESULT MainGame::Init()
 	ImageManager::GetSingleton()->Init();
 	SceneManager::GetSingleton()->Init();
 
-	ImageManager::GetSingleton()->AddImage("EnemyMissile",
-		"Image/구슬.bmp", 20, 20, true, RGB(255, 0, 255));
+	ImageManager::GetSingleton()->AddImage("아래미사일",
+		"Image/Bullet/Missile_Down.bmp", 6, 8, true, RGB(255, 0, 255));
+	ImageManager::GetSingleton()->AddImage("위미사일",
+		"Image/Bullet/Missile_Up.bmp", 6, 8, true, RGB(255, 0, 255));
+	ImageManager::GetSingleton()->AddImage("왼쪽미사일",
+		"Image/Bullet/Missile_Left.bmp", 8, 6, true, RGB(255, 0, 255));
+	ImageManager::GetSingleton()->AddImage("오른쪽미사일",
+		"Image/Bullet/Missile_Right.bmp", 8, 6, true, RGB(255, 0, 255));
+
 
 	// 메인게임의 초기화 함수
 	//hTimer = (HANDLE)SetTimer(g_hWnd, 0, 1, NULL);

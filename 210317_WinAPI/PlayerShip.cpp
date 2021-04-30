@@ -28,8 +28,10 @@ HRESULT PlayerShip::Init(CollisionCheck* collisionCheck)
 	currFrameY = 0;
 
 	// 미사일 매니저
-	//missileMgr = new MissileManager();
-	//missileMgr->Init();
+	missileMgr = new MissileManager();
+	missileMgr->Init(this);
+
+	playerCurrMove = 2;
 
 	return S_OK;
 }
@@ -46,6 +48,16 @@ void PlayerShip::Update()
 	// 출력
 	playerRect = { (LONG)(pos.x - size / 2) , (LONG)(pos.y - size / 2), (LONG)(pos.x + size / 2) , (LONG)(pos.y + size / 2) };
 	(this->collisionCheck)->SetPlayerRect(&playerRect);
+
+	if (missileMgr)
+	{
+		missileMgr->Update();
+	}
+
+	if (KeyManager::GetSingleton()->IsOnceKeyDown('Z'))
+	{
+		missileMgr->Fire();
+	}
 }
 
 void PlayerShip::Move()
@@ -150,5 +162,10 @@ void PlayerShip::Render(HDC hdc)
 	if (image)
 	{
 		image->FrameRender(hdc, pos.x, pos.y, currFrameX, currFrameY, true);
+	}
+
+	if (missileMgr)
+	{
+		missileMgr->Render(hdc);
 	}
 }

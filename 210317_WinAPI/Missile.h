@@ -3,6 +3,7 @@
 
 class Image;
 class Enemy;
+class PlayerShip;
 class Missile : public GameNode
 {
 public:
@@ -28,10 +29,14 @@ private:
 	Enemy* target;
 	float destAngle;
 
-	Enemy* owner;
+	Enemy* enemyOwner;
+	PlayerShip* playerOwner;
+
+	int playerCurrMove;
 
 public:
-	HRESULT Init(Enemy* owner);
+	HRESULT Init(Enemy* enemyOwner);
+	HRESULT Init(PlayerShip* playerOwner);
 	void Release();		
 	void Update();		
 	void Render(HDC hdc);
@@ -49,6 +54,8 @@ public:
 	inline void SetType(TYPE type) { this->missileType = type; }
 	inline void SetAngle(float angle) { this->angle = angle; }
 	inline void SetFireIndex(int fireIndex) { this->fireIndex = fireIndex; }
+
+	inline void SetCurrMove(int currMove) { this->playerCurrMove = currMove; }
 
 	inline int GetSize() { return this->size; }
 };

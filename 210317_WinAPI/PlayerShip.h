@@ -31,6 +31,9 @@ public:
 	void Move();
 	void Render(HDC hdc);
 
+	inline void SetPos(FPOINT pos) { this->pos = pos; }
+	inline FPOINT GetPos() { return this->pos; }
+	inline int GetCurrMove() { return this->playerCurrMove; }
 	// 플레이어 움직임 여부
 };
 

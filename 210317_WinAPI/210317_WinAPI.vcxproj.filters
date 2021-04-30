@@ -14,9 +14,6 @@
     <Filter Include="MainGame\Enemy">
       <UniqueIdentifier>{6e5df244-c6a3-43cb-b9d0-02b9ddf1a72c}</UniqueIdentifier>
     </Filter>
-    <Filter Include="MainGame\Missile">
-      <UniqueIdentifier>{5a86d586-c7fc-46be-93af-bd645e44e8f4}</UniqueIdentifier>
-    </Filter>
     <Filter Include="2D Framework\Manager">
       <UniqueIdentifier>{b13c0c7c-4aa6-4918-a643-613eaee0edc6}</UniqueIdentifier>
     </Filter>
@@ -42,6 +39,9 @@
     <Filter Include="헤더 파일">
       <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
       <Extensions>h;hh;hpp;hxx;h++;hm;inl;inc;ipp;xsd</Extensions>
+    </Filter>
+    <Filter Include="MainGame\Missile">
+      <UniqueIdentifier>{5a86d586-c7fc-46be-93af-bd645e44e8f4}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
