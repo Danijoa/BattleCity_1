@@ -4,11 +4,14 @@
 
 HRESULT EnemyManager::Init(CollisionCheck* collisionCheck)
 {
-    vEnemys.resize(1);
-    for (int i = 0; i < 1; i++)
+    this->collisionCheck = collisionCheck;
+
+    vEnemys.resize(2);
+    for (int i = 0; i < 2; i++)
     {
         vEnemys[i] = new Enemy();
-        vEnemys[i]->Init(collisionCheck, 500 + (i % 5) * 200, 100 + (i / 5) * 500);
+        vEnemys[i]->Init(this->collisionCheck, 500 + (i % 5) * 200, 100 + (i / 5) * 500);
+
     }
 
     return S_OK;
@@ -16,11 +19,11 @@ HRESULT EnemyManager::Init(CollisionCheck* collisionCheck)
 
 void EnemyManager::Release()
 {
-    // ¹Ýº¹ÀÚ(iterator) : STL ÀÚ·á±¸Á¶¸¦ ±¸¼ºÇÏ´Â ¿ø¼ÒÀÇ ¸Þ¸ð¸®¸¦ ÀúÀåÇÏ´Â °´Ã¼
+    // ï¿½Ýºï¿½ï¿½ï¿½(iterator) : STL ï¿½Ú·á±¸ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ï´ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Þ¸ð¸®¸ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ï´ï¿½ ï¿½ï¿½Ã¼
     vector<Enemy*>::iterator it;
     for (it = vEnemys.begin(); it != vEnemys.end(); it++)
     {
-        (*it)->Release();   // (*it) -> Enemy* µ¥ÀÌÅÍÅ¸ÀÔÈ®ÀÎ
+        (*it)->Release();   // (*it) -> Enemy* ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Å¸ï¿½ï¿½È®ï¿½ï¿½
         delete (*it);
         (*it) = nullptr;
     }
@@ -49,6 +52,6 @@ void EnemyManager::AddEnemy(int size)
     for (int i = 0; i < size; i++)
     {
         vEnemys.push_back(new Enemy());
-        vEnemys[vEnemys.size() - 1]->Init();
+        vEnemys[vEnemys.size() - 1]->Init(this->collisionCheck);
     }
 }

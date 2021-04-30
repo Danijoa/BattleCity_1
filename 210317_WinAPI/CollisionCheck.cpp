@@ -1,5 +1,7 @@
 #include "CollisionCheck.h"
 #include "Missile.h"
+#include "Enemy.h"
+
 
 HRESULT CollisionCheck::Init()
 {
@@ -12,6 +14,7 @@ HRESULT CollisionCheck::Init()
 	playerCurrDir = -1;
 	playerCanMove = true;
 
+
     return E_NOTIMPL;
 }
 
@@ -21,25 +24,36 @@ void CollisionCheck::Release()
 
 void CollisionCheck::Update()
 {
-	// tileNumInfo¿Í tileInfo »ó¿¡¼­ ÇÃ·¹ÀÌ¾î ÀÎµ¦½º À§Ä¡
-	 playerIndex_X = (playerFuturePos.x - 200) / TILESIZE;
-	 playerIndex_Y = (playerFuturePos.y - 50) / TILESIZE;
+	// tileNumInfoï¿½ï¿½ tileInfo ï¿½ó¿¡¼ï¿½ ï¿½Ã·ï¿½ï¿½Ì¾ï¿½ (future)ï¿½Îµï¿½ï¿½ï¿½ ï¿½ï¿½Ä¡
+	findPlayerFutureData();
+	// ï¿½Ã·ï¿½ï¿½Ì¾ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½æµ¹ Ã¼Å©
+	playerMoveCheck();
 
-	 playerFutureRectIndex.left = ((playerFuturePos.x - size / 2) - 200) / TILESIZE;
-	 playerFutureRectIndex.right = ((playerFuturePos.x + size / 2) - 200) / TILESIZE;
+	// ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½æµ¹ Ã¼Å©
+	enemyMoveCheck();
+}
 
-	 playerFutureRectIndex.top = ((playerFuturePos.y - size / 2) - 50) / TILESIZE;
-	 playerFutureRectIndex.bottom = ((playerFuturePos.y + size / 2) - 50) / TILESIZE;
+void CollisionCheck::findPlayerFutureData()
+{
+	// ï¿½ï¿½ ï¿½ï¿½ ï¿½Ö´ï¿½ ï¿½Ã·ï¿½ï¿½Ì¾î°¡ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Ä¡ï¿½ï¿½ ï¿½Îµï¿½ï¿½ï¿½
+	playerIndex_X = (playerFuturePos.x - 200) / TILESIZE;
+	playerIndex_Y = (playerFuturePos.y - 50) / TILESIZE;
 
 	//
 	 playerMoveCheck();
 	 mapCollisionCheck();
-}
+	// ï¿½ï¿½ ï¿½ï¿½ ï¿½Ö´ï¿½ ï¿½Ã·ï¿½ï¿½Ì¾î°¡ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Ä¡ï¿½ï¿½ ï¿½Îµï¿½ï¿½ï¿½
+	playerFutureRectIndex.left = ((playerFuturePos.x - size / 2) - 200) / TILESIZE;
+	playerFutureRectIndex.right = ((playerFuturePos.x + size / 2) - 200) / TILESIZE;
+
+	playerFutureRectIndex.top = ((playerFuturePos.y - size / 2) - 50) / TILESIZE;
+	playerFutureRectIndex.bottom = ((playerFuturePos.y + size / 2) - 50) / TILESIZE;
+
 
 void CollisionCheck::playerMoveCheck()
 {
-	// ÇÃ·¹ÀÌ¾î Ãæµ¹¹Ú½º¶û Ãæµ¹ ¹Ú½º¶û Ãæµ¹
-	if (playerCurrDir == 0)			//ÁÂ
+	// ï¿½Ã·ï¿½ï¿½Ì¾ï¿½ ï¿½æµ¹ï¿½Ú½ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½æµ¹ ï¿½Ú½ï¿½ï¿½ï¿½ ï¿½æµ¹
+	if (playerCurrDir == 0)			//ï¿½ï¿½
 	{
 		if ((playerIndex_X - 1) < 0)
 		{
@@ -57,7 +71,7 @@ void CollisionCheck::playerMoveCheck()
 			}
 		}
 	}
-	else if (playerCurrDir == 1)	//¿ì
+	else if (playerCurrDir == 1)	//ï¿½ï¿½
 	{
 		if ((playerIndex_X + 1) >= TILE_X)
 		{
@@ -75,7 +89,7 @@ void CollisionCheck::playerMoveCheck()
 			}
 		}
 	}
-	else if (playerCurrDir == 2)	//»ó
+	else if (playerCurrDir == 2)	//ï¿½ï¿½
 	{
 		if (playerIndex_Y - 1 < 0)
 		{
@@ -93,7 +107,7 @@ void CollisionCheck::playerMoveCheck()
 			}
 		}
 	}
-	else if (playerCurrDir == 3)	//ÇÏ
+	else if (playerCurrDir == 3)	//ï¿½ï¿½
 	{
 		if (playerIndex_Y + 1 >= TILE_Y)
 		{
@@ -140,13 +154,100 @@ void CollisionCheck::mapCollisionCheck()
 				}
 			}
 		}
+	}
+}
 
+void CollisionCheck::enemyMoveCheck()
+{
+	// ï¿½ï¿½ ï¿½æµ¹ï¿½Ú½ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½æµ¹ ï¿½Ú½ï¿½ï¿½ï¿½ ï¿½æµ¹
+	for(auto enemyIt : enemyData)
+	{
+		if (enemyIt->GetEnemyCurrDir() == 0)	//ï¿½ï¿½
+		{
+			if ((enemyIt->GetEnemyFutureIndex().x - 1) < 0)
+			{
+				return;
+			}
+			else
+			{
+				enemyIt->SetEnemyCanMove(true);
+
+				for (int y = enemyIt->GetEnemyFutureRectIndex().top; y <= enemyIt->GetEnemyFutureRectIndex().bottom; y++)
+				{
+					int tempID = ((int)(enemyIt->GetEnemyFutureIndex().x - 1) + (y * TILE_X));
+					if (tileNumInfo[tempID] != 0)
+					{
+						enemyIt->SetEnemyCanMove(false);
+					}
+				}
+			}
+		}
+		else if (enemyIt->GetEnemyCurrDir() == 1)	//ï¿½ï¿½
+		{
+			if ((enemyIt->GetEnemyFutureIndex().x + 1) >= TILE_X)
+			{
+				return;
+			}
+			else
+			{
+				enemyIt->SetEnemyCanMove(true);
+
+				for (int y = enemyIt->GetEnemyFutureRectIndex().top; y <= enemyIt->GetEnemyFutureRectIndex().bottom; y++)
+				{
+					int tempID = ((int)(enemyIt->GetEnemyFutureIndex().x + 1) + (y * TILE_X));
+					if (tileNumInfo[tempID] != 0)
+					{
+						enemyIt->SetEnemyCanMove(false);
+					}
+				}
+			}
+		}
+		else if (enemyIt->GetEnemyCurrDir() == 2)	//ï¿½ï¿½
+		{
+			if ((enemyIt->GetEnemyFutureIndex().y - 1) < 0)
+			{
+				return;
+			}
+			else
+			{
+				enemyIt->SetEnemyCanMove(true);
+
+				for (int x = enemyIt->GetEnemyFutureRectIndex().left; x <= enemyIt->GetEnemyFutureRectIndex().right; x++)
+				{
+					int tempID = (x + ((int)(enemyIt->GetEnemyFutureIndex().y - 1) * TILE_X));
+					if (tileNumInfo[tempID] != 0)
+					{
+						enemyIt->SetEnemyCanMove(false);
+					}
+				}
+			}
+		}
+		else if (enemyIt->GetEnemyCurrDir() == 3)	//ï¿½ï¿½
+		{
+			if ((enemyIt->GetEnemyFutureIndex().y + 1) >= TILE_Y)
+			{
+				return;
+			}
+			else
+			{
+				enemyIt->SetEnemyCanMove(true);
+
+				for (int x = enemyIt->GetEnemyFutureRectIndex().left; x <= enemyIt->GetEnemyFutureRectIndex().right; x++)
+				{
+					int tempID = (x + ((int)(enemyIt->GetEnemyFutureIndex().y + 1) * TILE_X));
+					if (tileNumInfo[tempID] != 0)
+					{
+						enemyIt->SetEnemyCanMove(false);
+					}
+				}
+			}
+		}
 	}
 }
 
 void CollisionCheck::Render(HDC hdc)
 {
-	// ¸Ê Ãæµ¹ ¹Ú½º Ãâ·Â
+	// ï¿½ï¿½ ï¿½æµ¹ ï¿½Ú½ï¿½ ï¿½ï¿½ï¿½
 	/*for (int i = 0; i < TILE_X * TILE_Y; i++)
 	{
 		if (tileNumInfo[i] != 0)
@@ -159,8 +260,8 @@ void CollisionCheck::Render(HDC hdc)
 		}
 	}*/
 	
-	// ÇÃ·¹ÀÌ¾î & ¸Ê Ãæµ¹ ¹Ú½º Ãâ·Â
-	//ÁÂ
+	// ï¿½Ã·ï¿½ï¿½Ì¾ï¿½ & ï¿½ï¿½ ï¿½æµ¹ ï¿½Ú½ï¿½ ï¿½ï¿½ï¿½
+	//ï¿½ï¿½
 	if (playerCurrDir == 0)
 	{
 		if (playerIndex_X - 1 >= 0)
@@ -175,7 +276,7 @@ void CollisionCheck::Render(HDC hdc)
 			} 
 		}
 	}
-	//¿ì
+	//ï¿½ï¿½
 	if (playerCurrDir == 1)
 	{
 		if (playerIndex_X + 1 < TILE_X)
@@ -190,7 +291,7 @@ void CollisionCheck::Render(HDC hdc)
 			}
 		}
 	}
-	//»ó
+	//ï¿½ï¿½
 	if (playerCurrDir == 2)
 	{
 		if (playerIndex_Y - 1 >= 0)
@@ -205,7 +306,7 @@ void CollisionCheck::Render(HDC hdc)
 			}
 		}
 	}
-	//ÇÏ
+	//ï¿½ï¿½
 	if (playerCurrDir == 3)
 	{
 		if (playerIndex_Y + 1 < TILE_Y)
@@ -221,16 +322,90 @@ void CollisionCheck::Render(HDC hdc)
 		}
 	}
 
-	// ÇÃ·¹ÀÌ¾î Ãæµ¹ ¹Ú½º Ãâ·Â
+	// ï¿½ï¿½ & ï¿½ï¿½ ï¿½æµ¹ ï¿½Ú½ï¿½ ï¿½ï¿½ï¿½
+	for (auto e : enemyData)
+	{
+		//ï¿½ï¿½
+		if (e->GetEnemyCurrDir() == 0)
+		{
+			if (e->GetEnemyFutureIndex().x - 1 >= 0)
+			{
+				for (int y = e->GetEnemyFutureRectIndex().top; y <= e->GetEnemyFutureRectIndex().bottom; y++)
+				{
+					Rectangle(hdc,
+						tileInfo[((int)(e->GetEnemyFutureIndex().x - 1) + (y * TILE_X))].rcTile.left,
+						tileInfo[((int)(e->GetEnemyFutureIndex().x - 1) + (y * TILE_X))].rcTile.top,
+						tileInfo[((int)(e->GetEnemyFutureIndex().x - 1) + (y * TILE_X))].rcTile.right,
+						tileInfo[((int)(e->GetEnemyFutureIndex().x - 1) + (y * TILE_X))].rcTile.bottom);
+				}
+			}
+		}
+		//ï¿½ï¿½
+		if (e->GetEnemyCurrDir() == 1)
+		{
+			if (e->GetEnemyFutureIndex().x + 1 < TILE_X)
+			{
+				for (int y = e->GetEnemyFutureRectIndex().top; y <= e->GetEnemyFutureRectIndex().bottom; y++)
+				{
+					Rectangle(hdc,
+						tileInfo[((int)(e->GetEnemyFutureIndex().x + 1) + (y * TILE_X))].rcTile.left,
+						tileInfo[((int)(e->GetEnemyFutureIndex().x + 1) + (y * TILE_X))].rcTile.top,
+						tileInfo[((int)(e->GetEnemyFutureIndex().x + 1) + (y * TILE_X))].rcTile.right,
+						tileInfo[((int)(e->GetEnemyFutureIndex().x + 1) + (y * TILE_X))].rcTile.bottom);
+				}
+			}
+		}
+		//ï¿½ï¿½
+		if (e->GetEnemyCurrDir() == 2)
+		{
+			if (e->GetEnemyFutureIndex().y - 1 >= 0)
+			{
+				for (int x = e->GetEnemyFutureRectIndex().left; x <= e->GetEnemyFutureRectIndex().right; x++)
+				{
+					Rectangle(hdc,
+						tileInfo[(x + ((int)(e->GetEnemyFutureIndex().y - 1) * TILE_X))].rcTile.left,
+						tileInfo[(x + ((int)(e->GetEnemyFutureIndex().y - 1) * TILE_X))].rcTile.top,
+						tileInfo[(x + ((int)(e->GetEnemyFutureIndex().y - 1) * TILE_X))].rcTile.right,
+						tileInfo[(x + ((int)(e->GetEnemyFutureIndex().y - 1) * TILE_X))].rcTile.bottom);
+				}
+			}
+		}
+		//ï¿½ï¿½
+		if (e->GetEnemyCurrDir() == 3)
+		{
+			if (e->GetEnemyFutureIndex().y + 1 < TILE_Y)
+			{
+				for (int x = e->GetEnemyFutureRectIndex().left; x <= e->GetEnemyFutureRectIndex().right; x++)
+				{
+					int tempID = (x + ((int)(e->GetEnemyFutureIndex().y + 1) * TILE_X));
+					Rectangle(hdc,
+						tileInfo[tempID].rcTile.left,
+						tileInfo[tempID].rcTile.top,
+						tileInfo[tempID].rcTile.right,
+						tileInfo[tempID].rcTile.bottom);
+				}
+			}
+		}
+	}
+
+	// ï¿½Ã·ï¿½ï¿½Ì¾ï¿½ ï¿½æµ¹ ï¿½Ú½ï¿½ ï¿½ï¿½ï¿½
 	Rectangle(hdc,
 		playerRect->left,
 		playerRect->top,
 		playerRect->right,
 		playerRect->bottom);
 
-	// Àû Ãæµ¹ ¹Ú½º Ãâ·Â
+	// ï¿½ï¿½ ï¿½æµ¹ ï¿½Ú½ï¿½ ï¿½ï¿½ï¿½
+	for (auto enemyIt : enemyData)
+	{
+		Rectangle(hdc,
+			enemyIt->GetEnemyRect().left,
+			enemyIt->GetEnemyRect().top,
+			enemyIt->GetEnemyRect().right,
+			enemyIt->GetEnemyRect().bottom);
+	}
 
-	// ¹Ì»çÀÏ Ãæµ¹ ¹Ú½º Ãâ·Â
+	// ï¿½Ì»ï¿½ï¿½ï¿½ ï¿½æµ¹ ï¿½Ú½ï¿½ ï¿½ï¿½ï¿½
 	/*for (itlPlayerMissiles = lPlayerMissiles.begin(); itlPlayerMissiles != lPlayerMissiles.end(); itlPlayerMissiles++)
 	{
 		Rectangle(hdc,

@@ -1,47 +1,63 @@
 #pragma once
 #include "GameNode.h"
 
-// TODO : ¾÷Ä³½ºÆÃ, ´Ù¿îÄ³½ºÆÃ ¼³¸í
+// TODO : ï¿½ï¿½Ä³ï¿½ï¿½ï¿½ï¿½, ï¿½Ù¿ï¿½Ä³ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
 class Image;
-class Tank;
 class MissileManager;
 class CollisionCheck;
 class Enemy : public GameNode
 {
 private:
 	MissileManager* missileMgr;
+	CollisionCheck* collisionCheck;
 
 	Image* image;
 	int currFrameX, currFrameY;
 	int updateCount;
+	int fireCount;
 
 	FPOINT pos;
 	int size;
 	string name;
-	RECT shape;
 	float moveSpeed;
 	bool isAlive;
-	float angle;
 
-	//GameNode* target;
-	Tank* target;
-	int dir;
-
-	int fireCount;
+	RECT enemyRect;
+	int enemyCurrDir;
+	FPOINT enemyFuturePos;
+	bool enemeyCanMove;
+	FPOINT enemyFutureIndex;
+	RECT enemyFutureRectIndex;
 
 	CollisionCheck* collisionCheck;
 
 public:
 	HRESULT Init(CollisionCheck* collisionCheck = nullptr , int posX = 0, int posY = 0);
+	//HRESULT Init(CollisionCheck* collisionCheck, int posX = 0, int posY = 0);
+
 	void Release();		
 	void Update();		
+	void Move();
 	void Render(HDC hdc);
 
 	inline void SetPos(FPOINT pos) { this->pos = pos; }
 	inline FPOINT GetPos() { return this->pos; }
-	inline void SetTarget(Tank* target) { this->target = target; }
+
 	inline int GetSize() { return this->size; }
 	inline void SetIsAlive(bool isAlive) { this->isAlive = isAlive; }
 	inline bool GetIsAlive() { return this->isAlive; }
+
+	inline RECT GetEnemyRect() { return enemyRect; }
+	inline void SetEnemyRect() { this->enemyRect; }
+	
+	inline int GetEnemyCurrDir() { return enemyCurrDir; }
+
+	inline void SetEnemyCanMove(bool canMove) { this->enemeyCanMove = canMove; }
+
+	inline FPOINT GetEnemyFuturePos() { return enemyFuturePos; }
+
+	inline FPOINT GetEnemyFutureIndex() { return enemyFutureIndex; }
+
+	inline RECT GetEnemyFutureRectIndex() { return enemyFutureRectIndex; }
 };
 

@@ -30,7 +30,7 @@ HRESULT PlayerShip::Init(CollisionCheck* collisionCheck)
 	missileMgr = new MissileManager();
 	missileMgr->Init(this->collisionCheck,this);
 
-	playerCurrMove = 2;
+	playerCurrDir = 2;
 
 	return S_OK;
 }
@@ -61,11 +61,11 @@ void PlayerShip::Update()
 
 void PlayerShip::Move()
 {
-	if (KeyManager::GetSingleton()->IsStayKeyDown(VK_LEFT))
+	if (KeyManager::GetSingleton()->IsStayKeyDown(VK_LEFT))	//좌
 	{
 		// 현재 방향키
-		playerCurrMove = 0;
-		(this->collisionCheck)->SetPlayerDir(playerCurrMove);
+		playerCurrDir = 0;
+		(this->collisionCheck)->SetPlayerDir(playerCurrDir);
 
 		// 콜리전 체크
 		(this->collisionCheck)->SetPlayerFuturePos({ pos.x - moveSpeed * TimerManager::GetSingleton()->GetElapsedTime() , pos.y});
@@ -81,14 +81,15 @@ void PlayerShip::Move()
 		}
 
 		// 움직임 가능 여부
-		if((this->collisionCheck)->GetPlayerCanMove() && (pos.x - size / 2 - moveSpeed * TimerManager::GetSingleton()->GetElapsedTime()) > 200)
+		if((this->collisionCheck)->GetPlayerCanMove() 
+			&& (pos.x - size / 2 - moveSpeed * TimerManager::GetSingleton()->GetElapsedTime()) > 200)
 			pos.x -= moveSpeed * TimerManager::GetSingleton()->GetElapsedTime();
 	}
-	else if (KeyManager::GetSingleton()->IsStayKeyDown(VK_RIGHT))
+	else if (KeyManager::GetSingleton()->IsStayKeyDown(VK_RIGHT))	//우
 	{
 		// 현재 방향키
-		playerCurrMove = 1;
-		(this->collisionCheck)->SetPlayerDir(playerCurrMove);
+		playerCurrDir = 1;
+		(this->collisionCheck)->SetPlayerDir(playerCurrDir);
 
 		// 콜리전 체크
 		(this->collisionCheck)->SetPlayerFuturePos({ pos.x + moveSpeed * TimerManager::GetSingleton()->GetElapsedTime() , pos.y });
@@ -104,14 +105,15 @@ void PlayerShip::Move()
 		}
 
 		// 움직임 가능 여부
-		if ((this->collisionCheck)->GetPlayerCanMove() && (pos.x + size / 2 + moveSpeed * TimerManager::GetSingleton()->GetElapsedTime()) < 200 + (TILE_X * TILESIZE))
+		if ((this->collisionCheck)->GetPlayerCanMove() 
+			&& (pos.x + size / 2 + moveSpeed * TimerManager::GetSingleton()->GetElapsedTime()) < 200 + (TILE_X * TILESIZE))
 			pos.x += moveSpeed * TimerManager::GetSingleton()->GetElapsedTime();
 	}
-	else if (KeyManager::GetSingleton()->IsStayKeyDown(VK_UP))
+	else if (KeyManager::GetSingleton()->IsStayKeyDown(VK_UP))	//상
 	{
 		// 현재 방향키
-		playerCurrMove = 2;
-		(this->collisionCheck)->SetPlayerDir(playerCurrMove);
+		playerCurrDir = 2;
+		(this->collisionCheck)->SetPlayerDir(playerCurrDir);
 
 		// 콜리전 체크
 		(this->collisionCheck)->SetPlayerFuturePos({ pos.x , pos.y - moveSpeed * TimerManager::GetSingleton()->GetElapsedTime() });
@@ -127,20 +129,20 @@ void PlayerShip::Move()
 		}
 
 		// 움직임 가능 여부
-		if ((this->collisionCheck)->GetPlayerCanMove() && (pos.y - size / 2 - moveSpeed * TimerManager::GetSingleton()->GetElapsedTime()) > 50)
+		if ((this->collisionCheck)->GetPlayerCanMove() 
+			&& (pos.y - size / 2 - moveSpeed * TimerManager::GetSingleton()->GetElapsedTime()) > 50)
 			pos.y -= moveSpeed * TimerManager::GetSingleton()->GetElapsedTime();
 	}
-	else if (KeyManager::GetSingleton()->IsStayKeyDown(VK_DOWN))
+	else if (KeyManager::GetSingleton()->IsStayKeyDown(VK_DOWN))	//하
 	{
 		// 현재 방향키
-		playerCurrMove = 3;
-		(this->collisionCheck)->SetPlayerDir(playerCurrMove);
+		playerCurrDir = 3;
+		(this->collisionCheck)->SetPlayerDir(playerCurrDir);
 
 		// 콜리전 체크
 		(this->collisionCheck)->SetPlayerFuturePos({ pos.x , pos.y + moveSpeed * TimerManager::GetSingleton()->GetElapsedTime() });
 
 		// 프레임 움직임
-
 		if (currFrameX != 4 && currFrameX != 5)
 			currFrameX = 4;
 
@@ -151,7 +153,8 @@ void PlayerShip::Move()
 		}
 
 		// 움직임 가능 여부
-		if ((this->collisionCheck)->GetPlayerCanMove() && (pos.y + size/2 + moveSpeed * TimerManager::GetSingleton()->GetElapsedTime()) < 50 + (TILE_X * TILESIZE))
+		if ((this->collisionCheck)->GetPlayerCanMove() 
+			&& (pos.y + size/2 + moveSpeed * TimerManager::GetSingleton()->GetElapsedTime()) < 50 + (TILE_Y * TILESIZE))
 			pos.y += moveSpeed * TimerManager::GetSingleton()->GetElapsedTime();
 	}
 }

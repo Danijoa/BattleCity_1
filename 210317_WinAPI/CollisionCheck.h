@@ -2,31 +2,38 @@
 #include "GameNode.h"
 
 class Missile;
+class Enemy;
 class CollisionCheck : public GameNode
 {
 private:
-	//±³Â÷ ¿µ¿ªÀ» ÀúÀåÇÒ RECT
+	//ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ RECT
 	RECT rcTemp;
 	int size;
 
-	// ¸Ê
+	// ï¿½ï¿½
 	int* tileNumInfo;	// [TILE_X * TILE_Y];
 	TILE_INFO* tileInfo;
 
-	// ÇÃ·¹ÀÌ¾î
+	// ï¿½Ã·ï¿½ï¿½Ì¾ï¿½
 	FPOINT playerFuturePos;
 	RECT* playerRect;
 	int playerCurrDir;
 	bool playerCanMove;
-	int playerIndex_X;
-	int playerIndex_Y;
+	int playerIndex_X, playerIndex_Y;
 	RECT playerFutureRectIndex;
-	int futureIndexDiff_X;
-	int futureIndexDiff_Y;
 
-	// Àû
+	// ï¿½ï¿½
+	list<Enemy*> enemyData;
+	FPOINT enemyFuturePos; 
+	FPOINT enemyFutureIndex;
+	RECT* enemyRect;
+	RECT* enemyFutureRect;
+	int enemyCurrDir;
+	bool enemyCanMove;
+	int enemyIndex_X, enemyIndex_Y;
+	RECT enemyFutureRectIndex;
 
-	// ¹Ì»çÀÏ
+	// ï¿½Ì»ï¿½ï¿½ï¿½
 	list<Missile*> lPlayerMissiles;
 	list<Missile*>::iterator itlPlayerMissiles;
 
@@ -40,23 +47,36 @@ public:
 	virtual void Update();
 	virtual void Render(HDC hdc);
 
+	// ï¿½Ã·ï¿½ï¿½Ì¾ï¿½ ï¿½Ô¼ï¿½
+	void findPlayerFutureData();
 	void playerMoveCheck();
 	void mapCollisionCheck();
 
-	// ¸Ê Å¸ÀÏ Á¤º¸
+	// ï¿½ï¿½ ï¿½Ô¼ï¿½
+	void enemyMoveCheck();
+	//void enemyCheck();
+
+	// ï¿½ï¿½ Å¸ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
 	inline void SetTileInfo(TILE_INFO* tileInfo) { this->tileInfo = tileInfo; }
 	inline void SetTileNumInfo(int* tileNumInfo) { this->tileNumInfo = tileNumInfo; }
 	inline int GetTileNumInfoIndex() { return Index; }
 
-	// ÇÃ·¹ÀÌ¾î Á¤º¸
+	// ï¿½Ã·ï¿½ï¿½Ì¾ï¿½ ï¿½ï¿½ï¿½ï¿½
 	inline void SetPlayerRect(RECT* rect) { this->playerRect = rect; }
 	inline void SetPlayerDir(int dir) { this->playerCurrDir = dir; }
 	inline void SetPlayerFuturePos(FPOINT pos) { this->playerFuturePos = pos; }
 	inline bool GetPlayerCanMove() { return this->playerCanMove; }
 
-	// Àû Á¤º¸
+	// ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
+	inline void SetAddEnemy(Enemy* enemy) { this->enemyData.push_back(enemy); }
+	inline void SetEnemyRect(RECT* rect) { this->enemyRect = rect; }
+	inline void SetEnemyDir(int dir) { this->enemyCurrDir = dir; }
+	inline void SetEnemyFuturePos(FPOINT pos) { this->enemyFuturePos = pos; }
+	inline void SetEnemyFutureIndex(FPOINT index) { this->enemyFutureIndex = index; }
+	inline void SetEnemyFutureRectIndex(RECT* rect) { this->enemyFutureRect = rect; }
+	inline bool GetEnemyCanMove() { return this->enemyCanMove; }
 
-	//¹Ì»çÀÏ Á¤º¸
+	//ï¿½Ì»ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
 	void AddFiredEnemyMissile(Missile* missile) { lEnemyMissiles.push_back(missile); }
 	void EraseEnemyMissile(Missile* missile) { lEnemyMissiles.remove(missile); }
 

@@ -88,7 +88,7 @@ void MissileManager::Fire()
 
             if (playerOwner)
             {
-                switch (playerOwner->GetCurrMove())
+                switch (playerOwner->GetCurrDir())
                 {
                 case 0:
                     (*it)->SetAngle(DegToRad(180));
