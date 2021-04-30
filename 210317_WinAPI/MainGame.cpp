@@ -2,6 +2,7 @@
 #include "Image.h"
 #include "BattleScene.h"
 #include "TilemapTool.h"
+#include "StartScene.h"
 
 HRESULT MainGame::Init()
 {
@@ -23,6 +24,9 @@ HRESULT MainGame::Init()
 	ImageManager::GetSingleton()->AddImage("미사일폭발",
 		"Image/Effect/Boom_Effect.bmp", 48*2, 16*2,3,1, true, RGB(255, 0, 255));
 
+	ImageManager::GetSingleton()->AddImage("플레이어 탱크",
+		"Image/Player/Player.bmp", 8 * 24 * 2, 4 * 24 * 2, 8, 4, true, RGB(255, 0, 255));//512*256
+
 
 	// 메인게임의 초기화 함수
 	//hTimer = (HANDLE)SetTimer(g_hWnd, 0, 1, NULL);
@@ -38,10 +42,12 @@ HRESULT MainGame::Init()
 	// 키와 씬 저장
 	SceneManager::GetSingleton()->AddScene("전투_1", new BattleScene());
 	SceneManager::GetSingleton()->AddScene("타일맵툴", new TilemapTool());
+	SceneManager::GetSingleton()->AddScene("시작메뉴", new StartScene());
 	
 	// 첫 씬 init
 	SceneManager::GetSingleton()->ChangeScene("전투_1");
 	//SceneManager::GetSingleton()->ChangeScene("타일맵툴");
+	//SceneManager::GetSingleton()->ChangeScene("시작메뉴");
 
 	isInited = true;
 

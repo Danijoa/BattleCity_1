@@ -102,6 +102,9 @@
     <ClCompile Include="CollisionCheck.cpp">
       <Filter>2D Framework</Filter>
     </ClCompile>
+    <ClCompile Include="StartScene.cpp">
+      <Filter>MainGame\Scene</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CommonFunction.h">
@@ -166,6 +169,9 @@
     </ClInclude>
     <ClInclude Include="CollisionCheck.h">
       <Filter>2D Framework</Filter>
+    </ClInclude>
+    <ClInclude Include="StartScene.h">
+      <Filter>MainGame\Scene</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

@@ -8,8 +8,7 @@ HRESULT PlayerShip::Init(CollisionCheck* collisionCheck)
 {
 	this->collisionCheck = collisionCheck;
 
-	image = ImageManager::GetSingleton()->AddImage("플레이어 탱크",
-		"Image/Player/Player.bmp", 8*24*2, 4*24*2, 8, 4, true, RGB(255, 0, 255));//512*256
+	image = ImageManager::GetSingleton()->FindImage("플레이어 탱크");
 
 	if (image == nullptr)
 	{
