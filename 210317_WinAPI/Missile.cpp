@@ -3,10 +3,12 @@
 #include "PlayerShip.h"
 #include "CommonFunction.h"
 #include "Image.h"
+#include "CollisionCheck.h"
 
-HRESULT Missile::Init(Enemy* enemyOwner)
+HRESULT Missile::Init(CollisionCheck* collisionCheck,Enemy* enemyOwner)
 {
 	this->enemyOwner = enemyOwner;
+	this->collisionCheck = collisionCheck;
 
 	playerOwner = nullptr;
 	pos = {-100, -100};
@@ -34,9 +36,10 @@ HRESULT Missile::Init(Enemy* enemyOwner)
     return S_OK;
 }
 
-HRESULT Missile::Init(PlayerShip* playerOwner)
+HRESULT Missile::Init(CollisionCheck* collisionCheck,  PlayerShip* playerOwner)
 {
 	this->playerOwner = playerOwner;
+	this->collisionCheck = collisionCheck;
 
 	enemyOwner = nullptr;
 	pos = { -100, -100 };
@@ -71,9 +74,14 @@ void Missile::Release()
 
 void Missile::Update()
 {
+	if (playerCurrMove == 0 || playerCurrMove == 1)			attackBox = GetRectToCenter(pos.x, pos.y, 16, 12);
+	else if (playerCurrMove == 2 || playerCurrMove == 3)	attackBox = GetRectToCenter(pos.x, pos.y, 12, 16);
+
 	// 위치 이동
 	if (isFired)
 	{
+		// 미사일 모양에 따른 RECT 크기
+
 		switch (missileType)
 		{
 		case TYPE::Normal:
@@ -87,17 +95,23 @@ void Missile::Update()
 			break;
 		}
 
-		if (pos.x < 0 || pos.y < 0 || pos.x > WINSIZE_X || pos.y > WINSIZE_Y)
+
+		if (pos.x < 200 || pos.y < 50 || pos.x > 200 + (TILE_X * TILESIZE) || pos.y > 50 + (TILE_X * TILESIZE))
 		{
 			isFired = false;
 			fireStep = 0;
+
+			if (enemyOwner)
+			{
+				collisionCheck->EraseEnemyMissile(this);
+			}
+			else if (playerOwner)
+			{
+				collisionCheck->ErasePlayerMissile(this);
+			}
 		}
 	}
 
-	shape.left = pos.x - size / 2;
-	shape.top = pos.y - size / 2;
-	shape.right = pos.x + size / 2;
-	shape.bottom = pos.y + size / 2;
 }
 
 void Missile::Render(HDC hdc)
@@ -119,8 +133,8 @@ void Missile::Render(HDC hdc)
 			img = ImageManager::GetSingleton()->FindImage("아래미사일");
 			break;
 		}
+		
 		img->Render(hdc, pos.x, pos.y, true);
-		//Ellipse(hdc, shape.left, shape.top, shape.right, shape.bottom);
 	}
 }
 
@@ -167,13 +181,32 @@ void Missile::MovingFollowTarget()
 void Missile::SetIsFired(bool isFired)
 {
 	this->isFired = isFired;
+
+	if (isFired == true)
+	{
+		if (enemyOwner)
+		{
+			collisionCheck->AddFiredEnemyMissile(this);
+		}
+		else if (playerOwner)
+		{
+			collisionCheck->AddFiredPlayerMissile(this);
+		}
+	}
+
+	else if (isFired == false)
+	{
+		pos.x = -100.0f;
+		pos.y = -100.0f;
+	}
+
 	if (enemyOwner)
 	{
 		pos.x = enemyOwner->GetPos().x;
 		pos.y = enemyOwner->GetPos().y;
 	}
 
-	if (playerOwner)
+	else if (playerOwner)
 	{
 		pos.x = playerOwner->GetPos().x;
 		pos.y = playerOwner->GetPos().y;

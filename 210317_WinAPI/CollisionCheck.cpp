@@ -1,4 +1,5 @@
 #include "CollisionCheck.h"
+#include "Missile.h"
 
 HRESULT CollisionCheck::Init()
 {
@@ -32,6 +33,7 @@ void CollisionCheck::Update()
 
 	//
 	 playerMoveCheck();
+	 mapCollisionCheck();
 }
 
 void CollisionCheck::playerMoveCheck()
@@ -108,6 +110,37 @@ void CollisionCheck::playerMoveCheck()
 				}
 			}
 		}
+	}
+}
+
+void CollisionCheck::mapCollisionCheck()
+{
+	for (int i = 0; i<TILE_X*TILE_Y; i++)
+	{
+		if (tileNumInfo[i] != 0)
+		{
+			for (itlPlayerMissiles = lPlayerMissiles.begin(); itlPlayerMissiles != lPlayerMissiles.end(); )
+			{
+				if ((*itlPlayerMissiles)->GetAttackBox().top <= tileInfo[i].rcTile.bottom
+					&& (*itlPlayerMissiles)->GetAttackBox().left <= tileInfo[i].rcTile.right
+					&& (*itlPlayerMissiles)->GetAttackBox().right >= tileInfo[i].rcTile.left
+					&& (*itlPlayerMissiles)->GetAttackBox().bottom >= tileInfo[i].rcTile.top)
+				{
+
+					(*itlPlayerMissiles)->SetIsFired(false);
+
+					if(tileNumInfo[i] == 1)					Index = i;
+
+					itlPlayerMissiles = lPlayerMissiles.erase(itlPlayerMissiles);
+
+				}
+				else
+				{
+					itlPlayerMissiles++;
+				}
+			}
+		}
+
 	}
 }
 
@@ -198,4 +231,21 @@ void CollisionCheck::Render(HDC hdc)
 	// 적 충돌 박스 출력
 
 	// 미사일 충돌 박스 출력
+	/*for (itlPlayerMissiles = lPlayerMissiles.begin(); itlPlayerMissiles != lPlayerMissiles.end(); itlPlayerMissiles++)
+	{
+		Rectangle(hdc,
+			(*itlPlayerMissiles)->GetAttackBox().left,
+			(*itlPlayerMissiles)->GetAttackBox().top,
+			(*itlPlayerMissiles)->GetAttackBox().right,
+			(*itlPlayerMissiles)->GetAttackBox().bottom);
+	}*/
+
+	for (itlEnemyMissiles = lEnemyMissiles.begin(); itlEnemyMissiles != lEnemyMissiles.end(); itlEnemyMissiles++)
+	{
+		Rectangle(hdc,
+			(*itlEnemyMissiles)->GetAttackBox().left,
+			(*itlEnemyMissiles)->GetAttackBox().top,
+			(*itlEnemyMissiles)->GetAttackBox().right,
+			(*itlEnemyMissiles)->GetAttackBox().bottom);
+	}
 }

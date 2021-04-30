@@ -1,6 +1,7 @@
 #pragma once
 #include "GameNode.h"
 
+class Missile;
 class CollisionCheck : public GameNode
 {
 private:
@@ -26,6 +27,12 @@ private:
 	// 적
 
 	// 미사일
+	list<Missile*> lPlayerMissiles;
+	list<Missile*>::iterator itlPlayerMissiles;
+
+	list<Missile*> lEnemyMissiles;
+	list<Missile*>::iterator itlEnemyMissiles;
+	int Index;
 
 public:
 	virtual HRESULT Init();	
@@ -34,10 +41,12 @@ public:
 	virtual void Render(HDC hdc);
 
 	void playerMoveCheck();
+	void mapCollisionCheck();
 
 	// 맵 타일 정보
 	inline void SetTileInfo(TILE_INFO* tileInfo) { this->tileInfo = tileInfo; }
 	inline void SetTileNumInfo(int* tileNumInfo) { this->tileNumInfo = tileNumInfo; }
+	inline int GetTileNumInfoIndex() { return Index; }
 
 	// 플레이어 정보
 	inline void SetPlayerRect(RECT* rect) { this->playerRect = rect; }
@@ -47,6 +56,12 @@ public:
 
 	// 적 정보
 
-	//미사일 정도
+	//미사일 정보
+	void AddFiredEnemyMissile(Missile* missile) { lEnemyMissiles.push_back(missile); }
+	void EraseEnemyMissile(Missile* missile) { lEnemyMissiles.remove(missile); }
+
+	void AddFiredPlayerMissile(Missile* missile) { lPlayerMissiles.push_back(missile); }
+	void ErasePlayerMissile(Missile* missile) { lPlayerMissiles.remove(missile); }
+
 };
 

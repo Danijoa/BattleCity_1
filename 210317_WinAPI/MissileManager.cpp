@@ -2,16 +2,17 @@
 #include "Missile.h"
 #include "PlayerShip.h"
 
-HRESULT MissileManager::Init(Enemy* enemyOwner)
+HRESULT MissileManager::Init(CollisionCheck* collisionCheck, Enemy* enemyOwner)
 {
     this->enemyOwner = enemyOwner;
+    this->collisionCheck = collisionCheck;
 
     vMissiles.resize(50);
     vector<Missile*>::iterator it;
     for (it = vMissiles.begin(); it != vMissiles.end(); it++)
     {
         (*it) = new Missile();
-        (*it)->Init(this->enemyOwner);
+        (*it)->Init(this->collisionCheck,this->enemyOwner);
 
         // 미사일 매니저를 들고 있는 적 객체의 정보를 전달
     }
@@ -19,16 +20,17 @@ HRESULT MissileManager::Init(Enemy* enemyOwner)
     return S_OK;
 }
 
-HRESULT MissileManager::Init(PlayerShip* playerOwner)
+HRESULT MissileManager::Init(CollisionCheck* collisionCheck, PlayerShip* playerOwner)
 {
     this->playerOwner = playerOwner;
+    this->collisionCheck = collisionCheck;
 
     vMissiles.resize(50);
     vector<Missile*>::iterator it;
     for (it = vMissiles.begin(); it != vMissiles.end(); it++)
     {
         (*it) = new Missile();
-        (*it)->Init(this->playerOwner);
+        (*it)->Init(this->collisionCheck,this->playerOwner);
 
         // 미사일 매니저를 들고 있는 적 객체의 정보를 전달
     }

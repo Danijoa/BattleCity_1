@@ -5,6 +5,7 @@
 class Enemy;
 class PlayerShip;
 class Missile;
+class CollisionCheck;
 class MissileManager : public GameNode
 {
 private:
@@ -13,10 +14,12 @@ private:
 
 	Enemy* enemyOwner;
 	PlayerShip* playerOwner;
+	CollisionCheck* collisionCheck;
+
 
 public:
-	HRESULT Init(Enemy* enemyOwner);
-	HRESULT Init(PlayerShip* playerOwner);
+	HRESULT Init(CollisionCheck* collisionCheck, Enemy* enemyOwner);
+	HRESULT Init(CollisionCheck* collisionCheck, PlayerShip* playerOwner);
 	void Release();
 	void Update();
 	void Render(HDC hdc);

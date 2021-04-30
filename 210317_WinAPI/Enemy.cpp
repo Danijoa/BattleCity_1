@@ -3,8 +3,10 @@
 #include "Image.h"
 #include "MissileManager.h"
 
-HRESULT Enemy::Init(int posX, int posY)
+HRESULT Enemy::Init(CollisionCheck* collisionCheck, int posX, int posY)
 {
+    this->collisionCheck = collisionCheck;
+
     // 이미지를 미리 로드한다
     image = ImageManager::GetSingleton()->AddImage("Enemy",
         "Image/Enemy/Enemy.bmp", 8*24*2, 6*24*2, 8, 6, true, RGB(255, 0, 255));   //512*384
@@ -32,7 +34,7 @@ HRESULT Enemy::Init(int posX, int posY)
 
     // 미사일 매니저
     missileMgr = new MissileManager();
-    missileMgr->Init(this);
+    missileMgr->Init(this->collisionCheck, this);
 
     fireCount = 0;
 

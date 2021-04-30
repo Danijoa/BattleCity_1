@@ -30,6 +30,9 @@ HRESULT BattleScene::Init()
 	gameBoard = new GameBoard();
 	gameBoard->Init();
 
+	//로드할 스테이지 결정 
+	loadStage(2);
+
 	return S_OK;
 }
 
@@ -45,8 +48,7 @@ void BattleScene::Update()
 {
 	float currTime1 = TimerManager::GetSingleton()->GetCurrTime();
 
-	//로드할 스테이지 결정 
-	loadStage(2);
+	//스테이지 변경 load
 
 	if (enemyMgr)
 	{
@@ -68,6 +70,8 @@ void BattleScene::Update()
 		collisionCheck->SetTileInfo(tileInfo);
 		collisionCheck->SetTileNumInfo(tileNumInfo);
 		collisionCheck->Update();
+		SetTileNumInfo(collisionCheck->GetTileNumInfoIndex());
+		SetTileInfo(collisionCheck->GetTileNumInfoIndex());
 	}
 }
 

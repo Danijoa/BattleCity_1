@@ -5,6 +5,7 @@
 class Image;
 class Tank;
 class MissileManager;
+class CollisionCheck;
 class Enemy : public GameNode
 {
 private:
@@ -28,8 +29,10 @@ private:
 
 	int fireCount;
 
+	CollisionCheck* collisionCheck;
+
 public:
-	HRESULT Init(int posX = 0, int posY = 0);		
+	HRESULT Init(CollisionCheck* collisionCheck = nullptr , int posX = 0, int posY = 0);
 	void Release();		
 	void Update();		
 	void Render(HDC hdc);

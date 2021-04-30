@@ -29,7 +29,7 @@ HRESULT PlayerShip::Init(CollisionCheck* collisionCheck)
 
 	// 미사일 매니저
 	missileMgr = new MissileManager();
-	missileMgr->Init(this);
+	missileMgr->Init(this->collisionCheck,this);
 
 	playerCurrMove = 2;
 

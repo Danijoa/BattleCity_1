@@ -8,7 +8,7 @@ HRESULT EnemyManager::Init(CollisionCheck* collisionCheck)
     for (int i = 0; i < 1; i++)
     {
         vEnemys[i] = new Enemy();
-        vEnemys[i]->Init(500 + (i % 5) * 200, 100 + (i / 5) * 500);
+        vEnemys[i]->Init(collisionCheck, 500 + (i % 5) * 200, 100 + (i / 5) * 500);
     }
 
     return S_OK;
