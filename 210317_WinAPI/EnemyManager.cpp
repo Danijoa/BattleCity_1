@@ -4,11 +4,13 @@
 
 HRESULT EnemyManager::Init(CollisionCheck* collisionCheck)
 {
-    vEnemys.resize(1);
-    for (int i = 0; i < 1; i++)
+    this->collisionCheck = collisionCheck;
+
+    vEnemys.resize(2);
+    for (int i = 0; i < 2; i++)
     {
         vEnemys[i] = new Enemy();
-        vEnemys[i]->Init(500 + (i % 5) * 200, 100 + (i / 5) * 500);
+        vEnemys[i]->Init(this->collisionCheck, 500 + (i % 5) * 200, 100 + (i / 5) * 500);
     }
 
     return S_OK;
@@ -49,6 +51,6 @@ void EnemyManager::AddEnemy(int size)
     for (int i = 0; i < size; i++)
     {
         vEnemys.push_back(new Enemy());
-        vEnemys[vEnemys.size() - 1]->Init();
+        vEnemys[vEnemys.size() - 1]->Init(this->collisionCheck);
     }
 }

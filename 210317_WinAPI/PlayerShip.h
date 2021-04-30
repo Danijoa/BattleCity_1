@@ -21,7 +21,7 @@ private:
 
 	CollisionCheck* collisionCheck;
 
-	int playerCurrMove;	// 좌 우 상 하
+	int playerCurrDir;	// 좌 우 상 하
 
 public:
 	HRESULT Init() { return E_FAIL; };
@@ -33,7 +33,7 @@ public:
 
 	inline void SetPos(FPOINT pos) { this->pos = pos; }
 	inline FPOINT GetPos() { return this->pos; }
-	inline int GetCurrMove() { return this->playerCurrMove; }
+	inline int GetCurrDir() { return this->playerCurrDir; }
 	// 플레이어 움직임 여부
 };
 
