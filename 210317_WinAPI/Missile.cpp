@@ -24,6 +24,10 @@ HRESULT Missile::Init(CollisionCheck* collisionCheck,Enemy* enemyOwner)
 	target = nullptr;
 	destAngle = 0.0f;
 
+	isBoom = false;
+	frame = 0;
+	elapsedTime = 0.0f;
+
 	// 이미지
 	img = ImageManager::GetSingleton()->FindImage("위미사일");
 	if (img == nullptr)
@@ -52,8 +56,10 @@ HRESULT Missile::Init(CollisionCheck* collisionCheck,  PlayerShip* playerOwner)
 	isFired = false;
 	missileType = TYPE::Normal;
 	fireStep = 0;
-	target = nullptr;
-	destAngle = 0.0f;
+
+	isBoom = false;
+	frame = 0;
+	elapsedTime = 0.0f;
 
 	// 이미지
 	img = ImageManager::GetSingleton()->FindImage("위미사일");
@@ -100,6 +106,8 @@ void Missile::Update()
 		{
 			isFired = false;
 			fireStep = 0;
+			isBoom = true;
+			boomPos = pos;
 
 			if (enemyOwner)
 			{
@@ -112,10 +120,26 @@ void Missile::Update()
 		}
 	}
 
+	if (isBoom)
+	{
+		elapsedTime += TimerManager::GetSingleton()->GetElapsedTime();
+		if (elapsedTime >= 0.05f)
+		{
+			frame++;
+			if (frame >= 3)
+			{
+				frame = 0;
+				isBoom = false;
+			}
+			elapsedTime = 0;
+		}
+	}
+
 }
 
 void Missile::Render(HDC hdc)
 {
+
 	if (isFired)
 	{
 		switch (playerCurrMove)
@@ -135,6 +159,12 @@ void Missile::Render(HDC hdc)
 		}
 		
 		img->Render(hdc, pos.x, pos.y, true);
+	}
+
+	if (isBoom)
+	{
+		img = ImageManager::GetSingleton()->FindImage("미사일폭발");
+		img->FrameRender(hdc, boomPos.x, boomPos.y, frame, 0, true);
 	}
 }
 
@@ -192,12 +222,6 @@ void Missile::SetIsFired(bool isFired)
 		{
 			collisionCheck->AddFiredPlayerMissile(this);
 		}
-	}
-
-	else if (isFired == false)
-	{
-		pos.x = -100.0f;
-		pos.y = -100.0f;
 	}
 
 	if (enemyOwner)

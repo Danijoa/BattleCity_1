@@ -17,7 +17,7 @@ HRESULT PlayerShip::Init(CollisionCheck* collisionCheck)
 		return E_FAIL;
 	}
 
-	pos.x = WINSIZE_X / 2 + 50;
+	pos.x = WINSIZE_X - 200;
 	pos.y = WINSIZE_Y / 2;
 
 	size = 40;

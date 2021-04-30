@@ -19,7 +19,7 @@ using namespace std;
 #include "SceneManager.h"
 
 //น่ฦฒ
-#define WINSIZE_X	1440
+#define WINSIZE_X	1000
 #define WINSIZE_Y	720
 //
 #define TILEMAPTOOLSIZE_X 1440

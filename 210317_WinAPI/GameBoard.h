@@ -5,10 +5,17 @@ class Image;
 class GameBoard : public GameNode
 {
 private:
-	Image* enemyIcon;				// 에너미 아이콘
+	Image* img;				// 에너미 아이콘
+
 	int enemyNumberToKill;			// 죽여야 할 에너미 수
 
-	int enemyIconX, enemyIconY;		//에너미 아이콘 윈도우상 위치
+	int enemyIconX, enemyIconY;		// 에너미 아이콘 윈도우상 위치
+	int flagIconX, flagIconY;		// 스테이지 깃발 아이콘 위치
+	int lifeIconX, lifeIconY;		// 1P 라이프 아이콘 위치
+	int titleX, titleY;
+
+	int stageNum;
+	int life;
 	
 
 public:

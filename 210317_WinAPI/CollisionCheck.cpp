@@ -126,9 +126,9 @@ void CollisionCheck::mapCollisionCheck()
 					&& (*itlPlayerMissiles)->GetAttackBox().right >= tileInfo[i].rcTile.left
 					&& (*itlPlayerMissiles)->GetAttackBox().bottom >= tileInfo[i].rcTile.top)
 				{
-
+					(*itlPlayerMissiles)->SetIsBoom(true);
+					(*itlPlayerMissiles)->SetBoomPos((*itlPlayerMissiles)->GetPos());
 					(*itlPlayerMissiles)->SetIsFired(false);
-
 					if(tileNumInfo[i] == 1)					Index = i;
 
 					itlPlayerMissiles = lPlayerMissiles.erase(itlPlayerMissiles);

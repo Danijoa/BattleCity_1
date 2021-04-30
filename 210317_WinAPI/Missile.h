@@ -26,6 +26,12 @@ private:
 	int fireIndex;
 	int fireStep;
 
+	bool isBoom;
+	FPOINT boomPos;
+
+	int frame;
+	float elapsedTime;
+
 	RECT attackBox;
 
 	//GameNode* target;
@@ -67,5 +73,8 @@ public:
 	// 미사일 충돌박스
 	inline RECT GetAttackBox() { return this->attackBox; }
 	inline void SetAttackBox(RECT attackBox) { this->attackBox = attackBox; }
+
+	inline void SetIsBoom(bool isBoom) { this->isBoom = isBoom; }
+	inline void SetBoomPos(FPOINT boomPos) { this->boomPos = boomPos; }
 };
 

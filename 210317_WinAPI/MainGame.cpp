@@ -20,6 +20,9 @@ HRESULT MainGame::Init()
 	ImageManager::GetSingleton()->AddImage("오른쪽미사일",
 		"Image/Bullet/Missile_Right.bmp", 8, 6, true, RGB(255, 0, 255));
 
+	ImageManager::GetSingleton()->AddImage("미사일폭발",
+		"Image/Effect/Boom_Effect.bmp", 48*2, 16*2,3,1, true, RGB(255, 0, 255));
+
 
 	// 메인게임의 초기화 함수
 	//hTimer = (HANDLE)SetTimer(g_hWnd, 0, 1, NULL);
