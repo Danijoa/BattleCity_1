@@ -261,6 +261,7 @@ void CollisionCheck::Render(HDC hdc)
 		}
 	}*/
 	
+	/*
 	// �÷��̾� & �� �浹 �ڽ� ���
 	//��
 	if (playerCurrDir == 0)
@@ -407,14 +408,14 @@ void CollisionCheck::Render(HDC hdc)
 	}
 
 	// �̻��� �浹 �ڽ� ���
-	/*for (itlPlayerMissiles = lPlayerMissiles.begin(); itlPlayerMissiles != lPlayerMissiles.end(); itlPlayerMissiles++)
+	for (itlPlayerMissiles = lPlayerMissiles.begin(); itlPlayerMissiles != lPlayerMissiles.end(); itlPlayerMissiles++)
 	{
 		Rectangle(hdc,
 			(*itlPlayerMissiles)->GetAttackBox().left,
 			(*itlPlayerMissiles)->GetAttackBox().top,
 			(*itlPlayerMissiles)->GetAttackBox().right,
 			(*itlPlayerMissiles)->GetAttackBox().bottom);
-	}*/
+	}
 
 	for (itlEnemyMissiles = lEnemyMissiles.begin(); itlEnemyMissiles != lEnemyMissiles.end(); itlEnemyMissiles++)
 	{
@@ -424,4 +425,5 @@ void CollisionCheck::Render(HDC hdc)
 			(*itlEnemyMissiles)->GetAttackBox().right,
 			(*itlEnemyMissiles)->GetAttackBox().bottom);
 	}
+	*/
 }
