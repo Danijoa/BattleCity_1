@@ -48,6 +48,20 @@ typedef struct tagTile
 	int num;
 } TILE_INFO;
 
+typedef struct myIndex
+{
+	int x;
+	int y;
+}IndexPair;
+
+typedef struct myRectIndex
+{
+	int leftIndex;
+	int topIndex;
+	int rightIndex;
+	int bottomIndex;
+}RECTIndexPair;
+
 //typedef tagFPoint FPOINT2;
 //typedef tagFPoint* PFPOINT2;
 

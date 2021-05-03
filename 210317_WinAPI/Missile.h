@@ -44,6 +44,9 @@ private:
 
 	int playerCurrMove;
 
+	IndexPair missileMapIndex;
+	RECTIndexPair missileMapRectIndex;
+
 public:
 	HRESULT Init(CollisionCheck* collisionCheck, Enemy* enemyOwner);
 	HRESULT Init(CollisionCheck* collisionCheck, PlayerShip* playerOwner);
@@ -76,5 +79,8 @@ public:
 
 	inline void SetIsBoom(bool isBoom) { this->isBoom = isBoom; }
 	inline void SetBoomPos(FPOINT boomPos) { this->boomPos = boomPos; }
+
+	inline IndexPair GetMapIndex() { return this->missileMapIndex; }
+	inline RECTIndexPair GetMapRECTIndex() { return this->missileMapRectIndex; }
 };
 

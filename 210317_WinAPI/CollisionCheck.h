@@ -15,31 +15,23 @@ private:
 	TILE_INFO* tileInfo;
 
 	// �÷��̾�
-	FPOINT playerFuturePos;
 	RECT* playerRect;
 	int playerCurrDir;
 	bool playerCanMove;
-	int playerIndex_X, playerIndex_Y;
-	RECT playerFutureRectIndex;
+	IndexPair playerFutureIndex;
+	RECTIndexPair playerFutureRectIndex;
 
 	// ��
 	list<Enemy*> enemyData;
-	FPOINT enemyFuturePos; 
-	FPOINT enemyFutureIndex;
-	RECT* enemyRect;
-	RECT* enemyFutureRect;
-	int enemyCurrDir;
-	bool enemyCanMove;
-	int enemyIndex_X, enemyIndex_Y;
-	RECT enemyFutureRectIndex;
 
 	// �̻���
 	list<Missile*> lPlayerMissiles;
+	list<Missile*>::iterator missilesIt;
 	list<Missile*>::iterator itlPlayerMissiles;
 
 	list<Missile*> lEnemyMissiles;
 	list<Missile*>::iterator itlEnemyMissiles;
-	int Index;
+	int collisionMapIndex;
 
 public:
 	virtual HRESULT Init();	
@@ -48,7 +40,6 @@ public:
 	virtual void Render(HDC hdc);
 
 	// �÷��̾� �Լ�
-	void findPlayerFutureData();
 	void playerMoveCheck();
 	void mapCollisionCheck();
 
@@ -59,22 +50,17 @@ public:
 	// �� Ÿ�� ����
 	inline void SetTileInfo(TILE_INFO* tileInfo) { this->tileInfo = tileInfo; }
 	inline void SetTileNumInfo(int* tileNumInfo) { this->tileNumInfo = tileNumInfo; }
-	inline int GetTileNumInfoIndex() { return Index; }
+	inline int GetTileNumInfoIndex() { return collisionMapIndex; }
 
 	// �÷��̾� ����
 	inline void SetPlayerRect(RECT* rect) { this->playerRect = rect; }
 	inline void SetPlayerDir(int dir) { this->playerCurrDir = dir; }
-	inline void SetPlayerFuturePos(FPOINT pos) { this->playerFuturePos = pos; }
+	inline void SetPlayerFutureIndex(IndexPair index) { this->playerFutureIndex = index; }
+	inline void SetPlayerFutureRECTIndex(RECTIndexPair rectIndex) { this->playerFutureRectIndex = rectIndex; }
 	inline bool GetPlayerCanMove() { return this->playerCanMove; }
 
 	// �� ����
 	inline void SetAddEnemy(Enemy* enemy) { this->enemyData.push_back(enemy); }
-	inline void SetEnemyRect(RECT* rect) { this->enemyRect = rect; }
-	inline void SetEnemyDir(int dir) { this->enemyCurrDir = dir; }
-	inline void SetEnemyFuturePos(FPOINT pos) { this->enemyFuturePos = pos; }
-	inline void SetEnemyFutureIndex(FPOINT index) { this->enemyFutureIndex = index; }
-	inline void SetEnemyFutureRectIndex(RECT* rect) { this->enemyFutureRect = rect; }
-	inline bool GetEnemyCanMove() { return this->enemyCanMove; }
 
 	//�̻��� ����
 	void AddFiredEnemyMissile(Missile* missile) { lEnemyMissiles.push_back(missile); }

@@ -25,8 +25,8 @@ private:
 	int enemyCurrDir;
 	FPOINT enemyFuturePos;
 	bool enemeyCanMove;
-	FPOINT enemyFutureIndex;
-	RECT enemyFutureRectIndex;
+	IndexPair enemyFutureIndex;
+	RECTIndexPair enemyFutureRectIndex;
 
 	CollisionCheck* collisionCheck;
 
@@ -39,6 +39,9 @@ public:
 	void Move();
 	void Render(HDC hdc);
 
+	void FrameMove(int start, int end);
+	void SetFutureIndex(FPOINT enemyFuturePos);
+
 	inline void SetPos(FPOINT pos) { this->pos = pos; }
 	inline FPOINT GetPos() { return this->pos; }
 
@@ -46,6 +49,7 @@ public:
 	inline void SetIsAlive(bool isAlive) { this->isAlive = isAlive; }
 	inline bool GetIsAlive() { return this->isAlive; }
 
+	//
 	inline RECT GetEnemyRect() { return enemyRect; }
 	inline void SetEnemyRect() { this->enemyRect; }
 	
@@ -55,8 +59,8 @@ public:
 
 	inline FPOINT GetEnemyFuturePos() { return enemyFuturePos; }
 
-	inline FPOINT GetEnemyFutureIndex() { return enemyFutureIndex; }
+	inline IndexPair GetEnemyFutureIndex() { return enemyFutureIndex; }
 
-	inline RECT GetEnemyFutureRectIndex() { return enemyFutureRectIndex; }
+	inline RECTIndexPair GetEnemyFutureRectIndex() { return enemyFutureRectIndex; }
 };
 

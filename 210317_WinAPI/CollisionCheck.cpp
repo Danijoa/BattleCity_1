@@ -8,9 +8,9 @@ HRESULT CollisionCheck::Init()
 	tileNumInfo = new int();
 	tileInfo = new TILE_INFO();
 	
-	size = 40;
+	size = 35;
 	
-	playerFuturePos = {0, 0};
+	//playerFuturePos = {0, 0};
 	playerCurrDir = -1;
 	playerCanMove = true;
 
@@ -24,48 +24,30 @@ void CollisionCheck::Release()
 
 void CollisionCheck::Update()
 {
-	// tileNumInfo�� tileInfo �󿡼� �÷��̾� (future)�ε��� ��ġ
-	findPlayerFutureData();
 	// �÷��̾� ������ �浹 üũ
 	playerMoveCheck();
 
 	// �� ������ �浹 üũ
 	enemyMoveCheck();
-}
 
-void CollisionCheck::findPlayerFutureData()
-{
-	// �� �� �ִ� �÷��̾ ������ ��ġ�� �ε���
-	playerIndex_X = (playerFuturePos.x - 200) / TILESIZE;
-	playerIndex_Y = (playerFuturePos.y - 50) / TILESIZE;
-
-	//
-	playerMoveCheck();
 	mapCollisionCheck();
-	// �� �� �ִ� �÷��̾ ������ ��ġ�� �ε���
-	playerFutureRectIndex.left = ((playerFuturePos.x - size / 2) - 200) / TILESIZE;
-	playerFutureRectIndex.right = ((playerFuturePos.x + size / 2) - 200) / TILESIZE;
-
-	playerFutureRectIndex.top = ((playerFuturePos.y - size / 2) - 50) / TILESIZE;
-	playerFutureRectIndex.bottom = ((playerFuturePos.y + size / 2) - 50) / TILESIZE;
 }
-
 
 void CollisionCheck::playerMoveCheck()
 {
 	// �÷��̾� �浹�ڽ��� �� �浹 �ڽ��� �浹
 	if (playerCurrDir == 0)			//��
 	{
-		if ((playerIndex_X - 1) < 0)
+		if ((playerFutureIndex.x - 1) < 0)
 		{
 			return;
 		}
 		else
 		{
 			playerCanMove = true;
-			for (int y = playerFutureRectIndex.top; y <= playerFutureRectIndex.bottom; y++)
+			for (int y = playerFutureRectIndex.topIndex; y <= playerFutureRectIndex.bottomIndex; y++)
 			{
-				if (tileNumInfo[(playerIndex_X - 1) + (y * TILE_X)] != 0)
+				if (tileNumInfo[(playerFutureIndex.x - 1) + (y * TILE_X)] != 0)
 				{
 					playerCanMove = false;
 				}
@@ -74,16 +56,16 @@ void CollisionCheck::playerMoveCheck()
 	}
 	else if (playerCurrDir == 1)	//��
 	{
-		if ((playerIndex_X + 1) >= TILE_X)
+		if ((playerFutureIndex.x + 1) >= TILE_X)
 		{
 			return;
 		}
 		else
 		{
 			playerCanMove = true;
-			for (int y = playerFutureRectIndex.top; y <= playerFutureRectIndex.bottom; y++)
+			for (int y = playerFutureRectIndex.topIndex; y <= playerFutureRectIndex.bottomIndex; y++)
 			{
-				if (tileNumInfo[(playerIndex_X + 1) + (y * TILE_X)] != 0)
+				if (tileNumInfo[(playerFutureIndex.x + 1) + (y * TILE_X)] != 0)
 				{
 					playerCanMove = false;
 				}
@@ -92,16 +74,16 @@ void CollisionCheck::playerMoveCheck()
 	}
 	else if (playerCurrDir == 2)	//��
 	{
-		if (playerIndex_Y - 1 < 0)
+		if (playerFutureIndex.y - 1 < 0)
 		{
 			return;
 		}
 		else
 		{
 			playerCanMove = true;
-			for (int x = playerFutureRectIndex.left; x <= playerFutureRectIndex.right; x++)
+			for (int x = playerFutureRectIndex.leftIndex; x <= playerFutureRectIndex.rightIndex; x++)
 			{
-				if (tileNumInfo[x + ((playerIndex_Y - 1) * TILE_X)] != 0)
+				if (tileNumInfo[x + ((playerFutureIndex.y - 1) * TILE_X)] != 0)
 				{
 					playerCanMove = false;
 				}
@@ -110,16 +92,16 @@ void CollisionCheck::playerMoveCheck()
 	}
 	else if (playerCurrDir == 3)	//��
 	{
-		if (playerIndex_Y + 1 >= TILE_Y)
+		if (playerFutureIndex.y + 1 >= TILE_Y)
 		{
 			return;
 		}
 		else
 		{
 			playerCanMove = true;
-			for (int x = playerFutureRectIndex.left; x <= playerFutureRectIndex.right; x++)
+			for (int x = playerFutureRectIndex.leftIndex; x <= playerFutureRectIndex.rightIndex; x++)
 			{
-				if (tileNumInfo[x + ((playerIndex_Y + 1) * TILE_X)] != 0)
+				if (tileNumInfo[x + ((playerFutureIndex.y + 1) * TILE_X)] != 0)
 				{
 					playerCanMove = false;
 				}
@@ -130,21 +112,19 @@ void CollisionCheck::playerMoveCheck()
 
 void CollisionCheck::mapCollisionCheck()
 {
-	for (int i = 0; i<TILE_X*TILE_Y; i++)
+	RECT rcTemp;
+	for (int i = 0; i < TILE_X * TILE_Y; i++)
 	{
 		if (tileNumInfo[i] != 0)
 		{
 			for (itlPlayerMissiles = lPlayerMissiles.begin(); itlPlayerMissiles != lPlayerMissiles.end(); )
 			{
-				if ((*itlPlayerMissiles)->GetAttackBox().top <= tileInfo[i].rcTile.bottom
-					&& (*itlPlayerMissiles)->GetAttackBox().left <= tileInfo[i].rcTile.right
-					&& (*itlPlayerMissiles)->GetAttackBox().right >= tileInfo[i].rcTile.left
-					&& (*itlPlayerMissiles)->GetAttackBox().bottom >= tileInfo[i].rcTile.top)
+				if (IntersectRect(&rcTemp, &(*itlPlayerMissiles)->GetAttackBox(), &tileInfo[i].rcTile))
 				{
 					(*itlPlayerMissiles)->SetIsBoom(true);
 					(*itlPlayerMissiles)->SetBoomPos((*itlPlayerMissiles)->GetPos());
 					(*itlPlayerMissiles)->SetIsFired(false);
-					if(tileNumInfo[i] == 1)					Index = i;
+					if (tileNumInfo[i] == 1)					collisionMapIndex = i;
 
 					itlPlayerMissiles = lPlayerMissiles.erase(itlPlayerMissiles);
 
@@ -156,6 +136,47 @@ void CollisionCheck::mapCollisionCheck()
 			}
 		}
 	}
+
+
+	/*
+	for (itlPlayerMissiles = lPlayerMissiles.begin(); itlPlayerMissiles != lPlayerMissiles.end(); )
+	{
+		int tempRectIndex[4];
+		tempRectIndex[0] = (*itlPlayerMissiles)->GetMapRECTIndex().leftIndex + (*itlPlayerMissiles)->GetMapRECTIndex().topIndex * TILE_X;
+		tempRectIndex[1] = (*itlPlayerMissiles)->GetMapRECTIndex().rightIndex + (*itlPlayerMissiles)->GetMapRECTIndex().topIndex * TILE_X;
+		tempRectIndex[2] = (*itlPlayerMissiles)->GetMapRECTIndex().leftIndex + (*itlPlayerMissiles)->GetMapRECTIndex().bottomIndex * TILE_X;
+		tempRectIndex[3] = (*itlPlayerMissiles)->GetMapRECTIndex().rightIndex + (*itlPlayerMissiles)->GetMapRECTIndex().bottomIndex * TILE_X;
+
+		bool check = false;
+		for (int i = 0; i < 4; i++)
+		{
+			if (tempRectIndex[i] >= 0 && tempRectIndex[i] < TILE_X * TILE_Y)
+			{
+				if (tileNumInfo[tempRectIndex[i]] == 1)
+				{
+					collisionMapIndex = tempRectIndex[i];
+				}
+
+				if (tileNumInfo[tempRectIndex[i]] != 0)
+				{
+					check = true;
+				}
+			}
+		}
+
+		if (check)
+		{
+			(*itlPlayerMissiles)->SetIsBoom(true);
+			(*itlPlayerMissiles)->SetBoomPos((*itlPlayerMissiles)->GetPos());
+			(*itlPlayerMissiles)->SetIsFired(false);
+			itlPlayerMissiles = lPlayerMissiles.erase(itlPlayerMissiles);
+		}
+		else
+		{
+			itlPlayerMissiles++;
+		}
+	}
+	*/
 }
 
 void CollisionCheck::enemyMoveCheck()
@@ -173,7 +194,7 @@ void CollisionCheck::enemyMoveCheck()
 			{
 				enemyIt->SetEnemyCanMove(true);
 
-				for (int y = enemyIt->GetEnemyFutureRectIndex().top; y <= enemyIt->GetEnemyFutureRectIndex().bottom; y++)
+				for (int y = enemyIt->GetEnemyFutureRectIndex().topIndex; y <= enemyIt->GetEnemyFutureRectIndex().bottomIndex; y++)
 				{
 					int tempID = ((int)(enemyIt->GetEnemyFutureIndex().x - 1) + (y * TILE_X));
 					if (tileNumInfo[tempID] != 0)
@@ -193,7 +214,7 @@ void CollisionCheck::enemyMoveCheck()
 			{
 				enemyIt->SetEnemyCanMove(true);
 
-				for (int y = enemyIt->GetEnemyFutureRectIndex().top; y <= enemyIt->GetEnemyFutureRectIndex().bottom; y++)
+				for (int y = enemyIt->GetEnemyFutureRectIndex().topIndex; y <= enemyIt->GetEnemyFutureRectIndex().bottomIndex; y++)
 				{
 					int tempID = ((int)(enemyIt->GetEnemyFutureIndex().x + 1) + (y * TILE_X));
 					if (tileNumInfo[tempID] != 0)
@@ -212,8 +233,8 @@ void CollisionCheck::enemyMoveCheck()
 			else
 			{
 				enemyIt->SetEnemyCanMove(true);
-
-				for (int x = enemyIt->GetEnemyFutureRectIndex().left; x <= enemyIt->GetEnemyFutureRectIndex().right; x++)
+				
+				for (int x = enemyIt->GetEnemyFutureRectIndex().leftIndex; x <= enemyIt->GetEnemyFutureRectIndex().rightIndex; x++)
 				{
 					int tempID = (x + ((int)(enemyIt->GetEnemyFutureIndex().y - 1) * TILE_X));
 					if (tileNumInfo[tempID] != 0)
@@ -233,7 +254,7 @@ void CollisionCheck::enemyMoveCheck()
 			{
 				enemyIt->SetEnemyCanMove(true);
 
-				for (int x = enemyIt->GetEnemyFutureRectIndex().left; x <= enemyIt->GetEnemyFutureRectIndex().right; x++)
+				for (int x = enemyIt->GetEnemyFutureRectIndex().leftIndex; x <= enemyIt->GetEnemyFutureRectIndex().rightIndex; x++)
 				{
 					int tempID = (x + ((int)(enemyIt->GetEnemyFutureIndex().y + 1) * TILE_X));
 					if (tileNumInfo[tempID] != 0)

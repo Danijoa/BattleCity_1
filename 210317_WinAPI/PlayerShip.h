@@ -21,6 +21,9 @@ private:
 
 	CollisionCheck* collisionCheck;
 
+	FPOINT playerFuturePos;
+	IndexPair playerFutureIndex;
+	RECTIndexPair playerFutureRectIndex;
 	int playerCurrDir;	// аб ©Л ╩С го
 
 public:
@@ -30,6 +33,9 @@ public:
 	void Update();
 	void Move();
 	void Render(HDC hdc);
+
+	void SetFutureIndex(FPOINT playerFuturePos);
+	void FrameMove(int start, int end);
 
 	inline void SetPos(FPOINT pos) { this->pos = pos; }
 	inline FPOINT GetPos() { return this->pos; }

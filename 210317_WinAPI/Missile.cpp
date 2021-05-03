@@ -134,7 +134,6 @@ void Missile::Update()
 			elapsedTime = 0;
 		}
 	}
-
 }
 
 void Missile::Render(HDC hdc)
@@ -212,18 +211,6 @@ void Missile::SetIsFired(bool isFired)
 {
 	this->isFired = isFired;
 
-	if (isFired == true)
-	{
-		if (enemyOwner)
-		{
-			collisionCheck->AddFiredEnemyMissile(this);
-		}
-		else if (playerOwner)
-		{
-			collisionCheck->AddFiredPlayerMissile(this);
-		}
-	}
-
 	if (enemyOwner)
 	{
 		pos.x = enemyOwner->GetPos().x;
@@ -236,4 +223,23 @@ void Missile::SetIsFired(bool isFired)
 		pos.y = playerOwner->GetPos().y;
 	}
 
+	if (isFired == true)
+	{
+		if (enemyOwner)
+		{
+			collisionCheck->AddFiredEnemyMissile(this);
+		}
+		else if (playerOwner)
+		{
+			missileMapIndex.x = (int)(pos.x - 200) / TILESIZE;
+			missileMapIndex.y = (int)(pos.y - 50) / TILESIZE;
+
+			missileMapRectIndex = { (int)(pos.x - 14 / 2 - 200) / TILESIZE,
+					(int)(pos.y - 14 / 2 - 50) / TILESIZE,
+					(int)(pos.x + 14 / 2 - 200) / TILESIZE,
+					(int)(pos.y + 14 / 2 - 50) / TILESIZE };
+
+			collisionCheck->AddFiredPlayerMissile(this);
+		}
+	}
 }

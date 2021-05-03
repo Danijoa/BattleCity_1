@@ -19,7 +19,7 @@ HRESULT PlayerShip::Init(CollisionCheck* collisionCheck)
 	pos.x = WINSIZE_X - 200;
 	pos.y = WINSIZE_Y / 2;
 
-	size = 40;
+	size = 35;
 
 	moveSpeed = 150.0f;
 
@@ -59,6 +59,30 @@ void PlayerShip::Update()
 	}
 }
 
+void PlayerShip::SetFutureIndex(FPOINT playerFuturePos)
+{
+	playerFutureIndex = { (int)(playerFuturePos.x - 200) / TILESIZE, (int)(playerFuturePos.y - 50) / TILESIZE };
+	(this->collisionCheck)->SetPlayerFutureIndex(playerFutureIndex);
+
+	playerFutureRectIndex = { ((int)(playerFuturePos.x - size / 2) - 200) / TILESIZE,
+	   ((int)(playerFuturePos.y - size / 2) - 50) / TILESIZE,
+	   ((int)(playerFuturePos.x + size / 2) - 200) / TILESIZE,
+	   ((int)(playerFuturePos.y + size / 2) - 50) / TILESIZE };
+	(this->collisionCheck)->SetPlayerFutureRECTIndex(playerFutureRectIndex);
+}
+
+void PlayerShip::FrameMove(int start, int end)
+{
+	if (currFrameX != start && currFrameX != end)
+		currFrameX = start;
+
+	currFrameX++;
+	if (currFrameX % (start + 2) == 0)
+	{
+		currFrameX = start;
+	}
+}
+
 void PlayerShip::Move()
 {
 	if (KeyManager::GetSingleton()->IsStayKeyDown(VK_LEFT))	//좌
@@ -68,20 +92,14 @@ void PlayerShip::Move()
 		(this->collisionCheck)->SetPlayerDir(playerCurrDir);
 
 		// 콜리전 체크
-		(this->collisionCheck)->SetPlayerFuturePos({ pos.x - moveSpeed * TimerManager::GetSingleton()->GetElapsedTime() , pos.y});
+		playerFuturePos = { pos.x - moveSpeed * TimerManager::GetSingleton()->GetElapsedTime() , pos.y };
+		SetFutureIndex(playerFuturePos);
 
 		// 프레임 움직임
-		if (currFrameX != 2 && currFrameX != 3)
-			currFrameX = 2;
-
-		currFrameX++;
-		if (currFrameX % 4 == 0)
-		{
-			currFrameX = 2;
-		}
+		FrameMove(2, 3);
 
 		// 움직임 가능 여부
-		if((this->collisionCheck)->GetPlayerCanMove() 
+		if ((this->collisionCheck)->GetPlayerCanMove()
 			&& (pos.x - size / 2 - moveSpeed * TimerManager::GetSingleton()->GetElapsedTime()) > 200)
 			pos.x -= moveSpeed * TimerManager::GetSingleton()->GetElapsedTime();
 	}
@@ -92,20 +110,14 @@ void PlayerShip::Move()
 		(this->collisionCheck)->SetPlayerDir(playerCurrDir);
 
 		// 콜리전 체크
-		(this->collisionCheck)->SetPlayerFuturePos({ pos.x + moveSpeed * TimerManager::GetSingleton()->GetElapsedTime() , pos.y });
+		playerFuturePos = { pos.x + moveSpeed * TimerManager::GetSingleton()->GetElapsedTime() , pos.y };
+		SetFutureIndex(playerFuturePos);
 
 		// 프레임 움직임
-		if (currFrameX != 6 && currFrameX != 7)
-			currFrameX = 6;
-
-		currFrameX++;
-		if (currFrameX % 8 == 0)
-		{
-			currFrameX = 6;
-		}
+		FrameMove(6, 7);
 
 		// 움직임 가능 여부
-		if ((this->collisionCheck)->GetPlayerCanMove() 
+		if ((this->collisionCheck)->GetPlayerCanMove()
 			&& (pos.x + size / 2 + moveSpeed * TimerManager::GetSingleton()->GetElapsedTime()) < 200 + (TILE_X * TILESIZE))
 			pos.x += moveSpeed * TimerManager::GetSingleton()->GetElapsedTime();
 	}
@@ -116,20 +128,14 @@ void PlayerShip::Move()
 		(this->collisionCheck)->SetPlayerDir(playerCurrDir);
 
 		// 콜리전 체크
-		(this->collisionCheck)->SetPlayerFuturePos({ pos.x , pos.y - moveSpeed * TimerManager::GetSingleton()->GetElapsedTime() });
+		playerFuturePos = { pos.x, pos.y - moveSpeed * TimerManager::GetSingleton()->GetElapsedTime() };
+		SetFutureIndex(playerFuturePos);
 
 		// 프레임 움직임
-		if (currFrameX != 0 && currFrameX != 1)
-			currFrameX = 0;
-
-		currFrameX++;
-		if (currFrameX % 2 == 0)
-		{
-			currFrameX = 0;
-		}
+		FrameMove(0, 1);
 
 		// 움직임 가능 여부
-		if ((this->collisionCheck)->GetPlayerCanMove() 
+		if ((this->collisionCheck)->GetPlayerCanMove()
 			&& (pos.y - size / 2 - moveSpeed * TimerManager::GetSingleton()->GetElapsedTime()) > 50)
 			pos.y -= moveSpeed * TimerManager::GetSingleton()->GetElapsedTime();
 	}
@@ -140,21 +146,15 @@ void PlayerShip::Move()
 		(this->collisionCheck)->SetPlayerDir(playerCurrDir);
 
 		// 콜리전 체크
-		(this->collisionCheck)->SetPlayerFuturePos({ pos.x , pos.y + moveSpeed * TimerManager::GetSingleton()->GetElapsedTime() });
+		playerFuturePos = { pos.x, pos.y + moveSpeed * TimerManager::GetSingleton()->GetElapsedTime() };
+		SetFutureIndex(playerFuturePos);
 
 		// 프레임 움직임
-		if (currFrameX != 4 && currFrameX != 5)
-			currFrameX = 4;
-
-		currFrameX++;
-		if (currFrameX % 6 == 0)
-		{
-			currFrameX = 4;
-		}
+		FrameMove(4, 5);
 
 		// 움직임 가능 여부
-		if ((this->collisionCheck)->GetPlayerCanMove() 
-			&& (pos.y + size/2 + moveSpeed * TimerManager::GetSingleton()->GetElapsedTime()) < 50 + (TILE_Y * TILESIZE))
+		if ((this->collisionCheck)->GetPlayerCanMove()
+			&& (pos.y + size / 2 + moveSpeed * TimerManager::GetSingleton()->GetElapsedTime()) < 50 + (TILE_Y * TILESIZE))
 			pos.y += moveSpeed * TimerManager::GetSingleton()->GetElapsedTime();
 	}
 }
